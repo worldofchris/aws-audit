@@ -16,7 +16,10 @@ for region in regions:
             for reservation in reservations: 
                 for instance in reservation.instances:
                     print region.name, ':',instance, ':', instance.tags
-
+            print "Volumes"
+            volumes = ec2_conn.get_all_volumes()
+            for volume in volumes:
+                print region.name, ':', volume
             elb_conn = boto.ec2.elb.connect_to_region(region.name)
             elbs = elb_conn.get_all_load_balancers()
             print "Load Balancers"
