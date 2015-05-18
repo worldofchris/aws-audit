@@ -1,6 +1,7 @@
 import boto.ec2
 import boto.ec2.elb
 import boto.rds2
+import boto.s3
 
 excludes = ['us-gov-west-1', 'cn-north-1']
 
@@ -29,9 +30,16 @@ for region in regions:
             rds_conn = boto.rds2.connect_to_region(region.name)
             response = rds_conn.describe_db_instances()
             rds_dbs  = response['DescribeDBInstancesResponse']['DescribeDBInstancesResult']['DBInstances']
+
             print "RDS Databases"
             for rds_db in rds_dbs:
                 print region.name, ':', rds_db.name
 
         except boto.exception.EC2ResponseError as e:
             print e, region
+
+s3_conn = boto.connect_s3()
+rs = s3_conn.get_all_buckets()
+print "Buckets"
+for bucket in rs:
+    print bucket.get_location(), ':', bucket.name
